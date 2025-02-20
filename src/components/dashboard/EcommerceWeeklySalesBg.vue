@@ -1,9 +1,5 @@
 <!-- eslint-disable camelcase -->
 <script setup>
-import appleIphone from '@images/cards/apple-iphone-x-lg.png'
-import appleWatch from '@images/cards/apple-watch-green-lg.png'
-import ps4Joystick from '@images/cards/ps4-joystick-lg.png'
-
 const websiteAnalytics = ref([])
 
 const ReportForService = async() => {
@@ -21,8 +17,8 @@ const ReportForService = async() => {
 
     websiteAnalytics.value = [
       {
-        name: 'Citas Medicas',
-        slideImg: 'https://cdn-icons-png.flaticon.com/512/5389/5389424.png',
+        name: 'Citas Medicas (Mes)',
+        slideImg: '/src/assets/images/cards/apoointment.png',
         income_bruto: resp.bruto_income_appoinments,
         variation_percentage: resp.VPAppointments,
         data: [
@@ -45,8 +41,8 @@ const ReportForService = async() => {
         ],
       },
       {
-        name: 'Vacunas',
-        slideImg: 'https://cdn-icons-png.flaticon.com/512/2867/2867078.png',
+        name: 'Vacunas (Mes)',
+        slideImg: '/src/assets/images/cards/jeringuilla.png',
         income_bruto: resp.bruto_income_vaccinations,
         variation_percentage: resp.VPVaccinations,
         data: [
@@ -69,8 +65,8 @@ const ReportForService = async() => {
         ],
       },
       {
-        name: 'Cirujías',
-        slideImg: 'https://cdn-icons-png.flaticon.com/512/4787/4787134.png',
+        name: 'Cirujías (Mes)',
+        slideImg: '/src/assets/images/cards/veterinario.png',
         income_bruto: resp.bruto_income_surgeries,
         variation_percentage: resp.VPsurgeries,
         data: [

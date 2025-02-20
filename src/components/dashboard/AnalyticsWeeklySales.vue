@@ -18,7 +18,7 @@ const moreList = [
   },
 ]
 
-const year_list = ref(['2023', '2024', '2025', '2026', '2027', '2028'])
+const year_list = ref(['2024', '2025', '2026', '2027', '2028'])
 const year_selected = ref(new Date().getFullYear())
 const vuetifyTheme = useTheme()
 const total_payment_current = ref(0)
@@ -64,16 +64,6 @@ const PaymentForMonthOfYear = async() => {
         type: 'column',
         name: 'Pagos - '+year_selected.value,
         data: payment_year_current,
-
-        // [
-        //   90,
-        //   52,
-        //   67,
-        //   45,
-        //   75,
-        //   55,
-        //   48,
-        // ],
       },
       {
         type: 'column',
@@ -98,15 +88,6 @@ const PaymentForMonthOfYear = async() => {
         name: 'Pagos - '+(parseInt(year_selected.value) - 1),
         data: payment_year_before,
 
-        // [
-        //   73,
-        //   20,
-        //   50,
-        //   -20,
-        //   58,
-        //   15,
-        //   31,
-        // ],
       },
     ]
 
@@ -172,15 +153,6 @@ const PaymentForMonthOfYear = async() => {
         axisBorder: { show: false },
         categories: categories_labels,
 
-        // [
-        //   'Jan',
-        //   'Feb',
-        //   'Mar',
-        //   'Apr',
-        //   'May',
-        //   'Jun',
-        //   'Jul',
-        // ],
         labels: {
           style: {
             fontSize: '13px',
@@ -190,8 +162,6 @@ const PaymentForMonthOfYear = async() => {
         },
       },
       yaxis: {
-        // max: 100,
-        // min: -100,
         show: true,
       },
     }
@@ -247,11 +217,6 @@ const salesReport = ref([])
         </VCol>
         <VCol cols="6" />
       </VRow>
-      <!--
-        <div class="mt-n8 me-n3">
-        <MoreBtn :menu-list="moreList" />
-        </div> 
-      -->
     </template>
 
     <VCardText>

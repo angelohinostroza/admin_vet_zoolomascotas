@@ -61,7 +61,7 @@ onMounted(() => {
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle>Reporte General</VCardTitle>
+      <VCardTitle>Reporte General (Mes)</VCardTitle>
       <VCardSubtitle class="d-flex align-center gap-x-2">
         Ingresos Netos del mes anterior ({{ report_general.net_income_total_before }} PEN)
         <div

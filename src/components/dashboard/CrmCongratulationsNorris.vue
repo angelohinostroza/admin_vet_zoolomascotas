@@ -1,7 +1,5 @@
 <!-- eslint-disable camelcase -->
 <script setup>
-import trophy from '@images/cards/trophy.png'
-
 const pet_most_payment_selected = ref({
   variation_percentage: 0,
   payments_total_before: 0,
@@ -78,8 +76,8 @@ onMounted(() => {
 
     <!-- Trophy -->
     <VImg
-      src="https://cdn-icons-png.flaticon.com/256/437/437493.png"
-      class="trophy flip-in-rtl"
+      src="/src/assets/images/cards/pet_visitas.png"
+      class="trophy flip-in-rtl" 
     />
   </VCard>
 </template>
@@ -95,7 +93,8 @@ onMounted(() => {
 .v-card .trophy {
   position: absolute;
   inline-size: 6.625rem;
-  inset-block-end: 0;
-  inset-inline-end: 1.25rem;
+  inset-block-end: 1rem; /* Distancia desde la parte inferior */
+  inset-inline-end: 0rem; /* Pegado a la derecha */
+  z-index: 2;
 }
 </style>

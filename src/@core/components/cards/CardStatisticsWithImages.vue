@@ -65,6 +65,8 @@ const isPositive = computed(() => Math.sign(props.change) === 1)
       <img
         v-if="props.image"
         :src="props.image"
+        :width="99" 
+        class="card-statistics-image"
       >
     </div>
   </VCard>

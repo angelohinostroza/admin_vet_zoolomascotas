@@ -24,7 +24,7 @@ const veterinarieNetIncome = async() => {
 
     console.log(resp)
     statisticsWithImages.value.push({
-      title: 'V. + Ingreso neto',
+      title: 'V. + Ingresos netos',
       subtitle: resp.veterinarie_most_net_income.full_name,
       stats: resp.veterinarie_most_net_income.net_income_total+" PEN",
       change: resp.variation_percentage,
@@ -34,26 +34,6 @@ const veterinarieNetIncome = async() => {
     })
     veterinarieServicesAsigned()
 
-    // [
-    //     {
-    //         title: 'V. + ingreso neto',
-    //         subtitle: 'Year of 2021',
-    //         stats: '8.14k',
-    //         change: 15.6,
-    //         image: illustration1,
-    //         imgWidth: 99,
-    //         color: 'primary',
-    //     },
-    //     {
-    //         title: 'V. + cantidad de servicio asignado',
-    //         subtitle: 'Last Month',
-    //         stats: '12.2k',
-    //         change: -25.5,
-    //         image: illustration2,
-    //         imgWidth: 85,
-    //         color: 'success',
-    //     },
-    // ]
   } catch (error) {
     console.log(error)
   }
@@ -72,7 +52,7 @@ const veterinarieServicesAsigned = async() => {
 
     console.log(resp)
     statisticsWithImages.value.push({
-      title: 'V. + Servicios asignado',
+      title: 'V. + Servicios asignados',
       subtitle: resp.veterinarie_most_asigned.full_name,
       stats: resp.veterinarie_most_asigned.n_asigned+"",
       change: resp.variation_percentage,
@@ -152,3 +132,12 @@ onMounted(() => {
     </VRow>
   </div>
 </template>
+
+<style lang="scss">
+.card-statistics-image {
+  display: flex;
+  justify-content: flex-end; /* Alinea la imagen a la derecha */
+  align-items: center; /* Asegura que esté alineada verticalmente */
+  max-width: 190px; /* Ajusta el tamaño */
+}
+</style>

@@ -44,7 +44,7 @@ onMounted(() => {
     <VCardText>
       <div class="d-flex align-center justify-space-between">
         <div class="text-body-1">
-          Total Bruto
+          Total Bruto (Mes)
         </div>
         <div
           v-if="income_bruto_selected.variation_percentage >= 0"

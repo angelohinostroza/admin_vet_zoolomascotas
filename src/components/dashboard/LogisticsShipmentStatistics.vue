@@ -62,7 +62,7 @@ const month_list = ref([
   },
 ])
 
-const year_list = ref(['2023', '2024', '2025', '2026', '2027', '2028'])
+const year_list = ref(['2024', '2025', '2026', '2027', '2028'])
 const year_selected = ref(new Date().getFullYear())
 const month_selected = ref(new Date().getMonth() + 1 <= 9 ? "0"+(new Date().getMonth() + 1) : ""+(new Date().getMonth() + 1))
 const total_payments = ref(0)
@@ -170,18 +170,6 @@ const PaymentXDayOfMonth = async() => {
         tickAmount: 10,
         categories: categories_labels,
 
-        // [
-        //   '1 Jan',
-        //   '2 Jan',
-        //   '3 Jan',
-        //   '4 Jan',
-        //   '5 Jan',
-        //   '6 Jan',
-        //   '7 Jan',
-        //   '8 Jan',
-        //   '9 Jan',
-        //   '10 Jan',
-        // ],
         labels: {
           style: {
             colors: labelColor,
@@ -196,8 +184,6 @@ const PaymentXDayOfMonth = async() => {
       yaxis: {
         tickAmount: 4,
 
-        // min: 0,
-        // max: 50,
         labels: {
           style: {
             colors: labelColor,
@@ -266,25 +252,6 @@ watch(year_selected, () => {
 const series = ref([])
 const categories_labels = ref([])
 const shipmentConfig = ref(null)
-
-// [
-//   {
-//     name: 'Shipment',
-//     type: 'column',
-//     data: [
-//       38,
-//       45,
-//       33,
-//       38,
-//       32,
-//       48,
-//       45,
-//       40,
-//       42,
-//       37,
-//     ],
-//   },
-// ]
 </script>
 
 <template>
@@ -316,22 +283,6 @@ const shipmentConfig = ref(null)
             />
           </VCol>
         </VRow>
-        <!--
-          <VBtnGroup
-          density="compact"
-          variant="outlined"
-          divided
-          >
-          <VBtn color="primary">
-          January
-          </VBtn>
-
-          <VBtn
-          icon="ri-arrow-down-s-line"
-          color="primary"
-          />
-          </VBtnGroup> 
-        -->
       </template>
     </VCardItem>
 
