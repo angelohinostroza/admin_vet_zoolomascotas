@@ -136,8 +136,8 @@ onMounted(() => {
 <style lang="scss">
 .card-statistics-image {
   display: flex;
-  justify-content: flex-end; /* Alinea la imagen a la derecha */
-  align-items: center; /* Asegura que esté alineada verticalmente */
-  max-width: 190px; /* Ajusta el tamaño */
+  justify-content: flex-end; 
+  align-items: center; 
+  max-width: 190px; 
 }
 </style>

@@ -18,7 +18,7 @@ const ReportForService = async() => {
     websiteAnalytics.value = [
       {
         name: 'Citas Medicas (Mes)',
-        slideImg: '/src/assets/images/cards/apoointment.png',
+        slideImg: '/src/assets/images/cards/appoinment.png',
         income_bruto: resp.bruto_income_appoinments,
         variation_percentage: resp.VPAppointments,
         data: [
@@ -42,7 +42,7 @@ const ReportForService = async() => {
       },
       {
         name: 'Vacunas (Mes)',
-        slideImg: '/src/assets/images/cards/jeringuilla.png',
+        slideImg: '/src/assets/images/cards/vaccination.png',
         income_bruto: resp.bruto_income_vaccinations,
         variation_percentage: resp.VPVaccinations,
         data: [
@@ -66,7 +66,7 @@ const ReportForService = async() => {
       },
       {
         name: 'Cirujías (Mes)',
-        slideImg: '/src/assets/images/cards/veterinario.png',
+        slideImg: '/src/assets/images/cards/surgery.png',
         income_bruto: resp.bruto_income_surgeries,
         variation_percentage: resp.VPsurgeries,
         data: [
@@ -204,15 +204,19 @@ onMounted(() => {
 
 <style lang="scss">
 .card-weekly-sales-img {
-  block-size: 200px;
+  block-size: 250px; 
+  inline-size: 250px;
 }
 
 @media screen and (min-width: 600px) {
   .card-weekly-sales-img {
     position: absolute;
     margin: auto;
-    inset-block: 0 40px;
-    inset-inline-end: 1rem;
+    inset-block: -55px 0;
+    inset-inline-end: -10px;
+    inline-size: 280px;
+    block-size: 230px; 
+    inline-size: 260px;
   }
 }
 

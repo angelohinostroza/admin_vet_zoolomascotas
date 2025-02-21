@@ -151,10 +151,11 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
 
 <style lang="scss" scoped>
 .app-logo {
-  display: flex;
+  display: flex !important;
   align-items: center;
   column-gap: 0.5rem;
 
+  
   .app-logo-title {
     font-size: 1.25rem;
     font-weight: 600;

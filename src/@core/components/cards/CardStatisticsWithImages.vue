@@ -65,7 +65,6 @@ const isPositive = computed(() => Math.sign(props.change) === 1)
       <img
         v-if="props.image"
         :src="props.image"
-        :width="99" 
         class="card-statistics-image"
       >
     </div>
@@ -75,7 +74,17 @@ const isPositive = computed(() => Math.sign(props.change) === 1)
 <style lang="scss">
 .illustrator-img {
   position: absolute;
-  inset-block-end: -5%;
-  inset-inline-end: 5%;
+  right: -20px; /* Mueve la imagen más a la derecha */
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.card-statistics-image {
+  width: 130px; /* Agranda la imagen */
+  max-width: 200px; /* Máximo tamaño permitido */
+  height: auto;
 }
 </style>
