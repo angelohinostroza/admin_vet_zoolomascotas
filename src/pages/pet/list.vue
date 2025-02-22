@@ -132,6 +132,7 @@ definePage({
     
         <div class="d-flex gap-x-4 align-center">
           <VBtn
+            v-if="isPermission('register_pet')"
             color="primary"
             prepend-icon="ri-add-line"
             @click="router.push({name: 'pet-add'})"
@@ -213,12 +214,14 @@ definePage({
               <td>
                 <div class="d-flex gap-1">
                   <IconBtn
+                    v-if="isPermission('edit_pet')"
                     size="small"
                     @click="editItem(item)"
                   >
                     <VIcon icon="ri-pencil-line" />
                   </IconBtn>
                   <IconBtn
+                    v-if="isPermission('delete_pet')"
                     size="small"
                     @click="deleteItem(item)"
                   >

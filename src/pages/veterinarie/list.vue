@@ -115,6 +115,7 @@ definePage({
     
         <div class="d-flex gap-x-4 align-center">
           <VBtn
+            v-if="isPermission('register_veterinary')"
             color="primary"
             prepend-icon="ri-add-line"
             @click="router.push({name: 'veterinarie-add'})"
@@ -164,12 +165,14 @@ definePage({
         <template #item.action="{ item }">
           <div class="d-flex gap-1">
             <IconBtn
+              v-if="isPermission('edit_veterinary')"
               size="small"
               @click="editItem(item)"
             >
               <VIcon icon="ri-pencil-line" />
             </IconBtn>
             <IconBtn
+              v-if="isPermission('delete_veterinary')"
               size="small"
               @click="deleteItem(item)"
             >

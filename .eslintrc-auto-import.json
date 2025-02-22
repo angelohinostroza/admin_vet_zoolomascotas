@@ -351,6 +351,11 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "PERMISOS": true
+    "PERMISOS": true,
+    "getPermissionsByModule": true,
+    "is": true,
+    "isPer": true,
+    "isPermi": true,
+    "isPermission": true
   }
 }

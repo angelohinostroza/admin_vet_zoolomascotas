@@ -95,6 +95,7 @@ definePage({
     
         <div class="d-flex gap-x-4 align-center">
           <VBtn
+            v-if="isPermission('register_rol')"
             color="primary"
             prepend-icon="ri-add-line"
             @click="isAddRoleDialogVisible = !isAddRoleDialogVisible"
@@ -126,12 +127,14 @@ definePage({
         <template #item.action="{ item }">
           <div class="d-flex gap-1">
             <IconBtn
+              v-if="isPermission('edit_rol')"
               size="small"
               @click="editItem(item)"
             >
               <VIcon icon="ri-pencil-line" />
             </IconBtn>
             <IconBtn
+              v-if="isPermission('delete_rol')"
               size="small"
               @click="deleteItem(item)"
             >

@@ -22,9 +22,14 @@ definePage({
       status-code="401"
       title="¡No estás autorizado! 🔐"
       description="No tienes permiso para acceder a esta página. ¡Ir a inicio!"
-      class="mb-10"
+      class="mb-5"
     />
-
+    <VBtn
+      to="/"
+      class="mt-5"
+    >
+      Volver al inicio
+    </VBtn>
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">
       <VImg
@@ -33,13 +38,6 @@ definePage({
         :height="$vuetify.display.xs ? 400 : 500"
         class="my-sm-5"
       />
-
-      <VBtn
-        to="/"
-        class="mt-10"
-      >
-        Volver al inicio
-      </VBtn>
 
       <VImg
         :src="miscThemeMask"

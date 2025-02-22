@@ -72,7 +72,10 @@ onMounted(() => {
 
 <template>
   <div>
-    <VRow class="match-height">
+    <VRow
+      v-if="isPermission('show_report_grafics')"
+      class="match-height"
+    >
       <!-- 👉 Sales Overview -->
       <VCol
         cols="12"
@@ -130,6 +133,20 @@ onMounted(() => {
         <AnalyticsWeeklySales />
       </VCol>
     </VRow>
+    <VRow
+      v-if="!isPermission('show_report_grafics')"
+      class="match-height d-flex justify-center"
+    >
+      <VCol
+        cols="10"
+        class="d-flex justify-center"
+      >
+        <img
+          src="/src/assets/images/pages/dashboard.jpg"
+          class="dashboard-image"
+        >  
+      </VCol>
+    </VRow>
   </div>
 </template>
 
@@ -139,5 +156,19 @@ onMounted(() => {
   justify-content: flex-end; 
   align-items: center; 
   max-width: 190px; 
+}
+.dashboard-image {
+  max-width: 100%;  /* Para que no sea más grande que su contenedor */
+  height: auto;  /* Mantiene la proporción */
+  display: block;  /* Evita márgenes no deseados */
+  margin: 0 auto;  /* Centra la imagen */
+  min-width: 300px;  /* Establece un tamaño mínimo */
+  max-height: 77vh;  /* Evita que sea demasiado alta en pantallas grandes */
+  object-fit: contain;  /* Ajusta la imagen sin recortarla */
+}
+@media (max-width: 600px) {
+  .dashboard-image {
+    min-width: 200px;  /* En móviles aún más pequeño si es necesario */
+  }
 }
 </style>

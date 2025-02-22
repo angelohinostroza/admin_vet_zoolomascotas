@@ -195,6 +195,7 @@ definePage({
           </VCol>
           <VCol cols="2">
             <VBtn
+              v-if="isPermission('register_appointment')"
               color="primary"
               prepend-icon="ri-add-line"
               @click="router.push({name: 'appointment-add'})"
@@ -364,12 +365,14 @@ definePage({
               <td>
                 <div class="d-flex gap-1">
                   <IconBtn
+                    v-if="isPermission('edit_appointment')"
                     size="small"
                     @click="editItem(item)"
                   >
                     <VIcon icon="ri-pencil-line" />
                   </IconBtn>
                   <IconBtn
+                    v-if="isPermission('delete_appointment')"
                     size="small"
                     @click="deleteItem(item)"
                   >

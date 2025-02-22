@@ -137,6 +137,7 @@ definePage({
     
         <div class="d-flex gap-x-4 align-center">
           <VBtn
+            v-if="isPermission('register_staff')"
             color="primary"
             prepend-icon="ri-add-line"
             @click="isAddStaffDialogVisible = !isAddStaffDialogVisible"
@@ -186,12 +187,14 @@ definePage({
         <template #item.action="{ item }">
           <div class="d-flex gap-1">
             <IconBtn
+              v-if="isPermission('edit_staff')"
               size="small"
               @click="editItem(item)"
             >
               <VIcon icon="ri-pencil-line" />
             </IconBtn>
             <IconBtn
+              v-if="isPermission('delete_staff')"
               size="small"
               @click="deleteItem(item)"
             >
