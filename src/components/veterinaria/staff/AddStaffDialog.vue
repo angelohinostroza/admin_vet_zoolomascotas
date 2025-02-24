@@ -5,6 +5,7 @@ import { type } from '../../../../auto-imports';
 <script setup>
 import { ref } from 'vue'
 
+
 const props = defineProps({
   isDialogVisible: {
     type: Boolean,
@@ -51,6 +52,31 @@ const FILE_AVATAR = ref(null)
 const IMAGEN_PREVIZUALIZA = ref(null)
 const roles = ref([])
 
+
+const emailRules = [
+  v => /.+@.+\..+/.test(v) || 'Debe ser un correo válido',
+]
+
+const passwordRules = [
+  v => (v && v.length >= 6) || 'La contraseña debe tener al menos 6 caracteres',
+  v => (v && v.length <= 15) || 'La contraseña no puede exceder 15 caracteres',
+]
+
+const calculateAge = birthday => {
+  if (!birthday) return 0
+  const birthDate = new Date(birthday)
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const monthDiff = today.getMonth() - birthDate.getMonth()
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+
+  return age
+}
+
+
 const fieldsClean = () => {
   form.value = {
     name: null,
@@ -82,14 +108,20 @@ const store = async() => {
 
     return
   }
-  if(!form.value.email){
-    warning.value = "Se debe llenar el email del usuario"
+  if(!form.value.phone){
+    warning.value = "Se debe llenar el Nº de teléfono del usuario"
 
     return
   }
-  if(!form.value.phone){
-    warning.value = "Se debe llenar el teléfono del usuario"
+  if(!form.value.n_document){
+    warning.value = "Se debe llenar el Nº de documento del usuario"
 
+    return
+  }
+  
+  if (calculateAge(form.value.birthday) < 18) {
+    warning.value = "El usuario debe ser mayor de 18 años"
+    
     return
   }
   if(!form.value.gender){
@@ -102,6 +134,13 @@ const store = async() => {
 
     return
   }
+  if(!form.value.email){
+    warning.value = "Se debe llenar el email del usuario"
+
+    return
+  }
+
+  
   if(!form.value.password){
     warning.value = "Se debe digitar una contraseña para el usuario"
 
@@ -340,6 +379,7 @@ onMounted(() => {
               label="Email"
               type="email"
               placeholder="john@email.com"
+              :rules="emailRules"
             />
           </VCol>
           <VCol cols="6">
@@ -349,6 +389,7 @@ onMounted(() => {
               placeholder="············"
               :type="isPasswordVisible ? 'text' : 'password'"
               :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+              :rules="passwordRules"
               @click:append-inner="isPasswordVisible = !isPasswordVisible"
             />
           </VCol>

@@ -8,25 +8,33 @@ const searchQuery = ref(null)
 const specie = ref(null)
 const species = ref(['Perro', 'Gato', 'Hámster', 'Loro', 'Tortuga', 'Vaca', 'Caballo', 'Cuy', 'Toro'])
 const pets = ref([])
+const loading = ref(true)
 const currentPage = ref(1)
 const totalPage = ref(1)
 const pet_selected_deleted = ref(null)
 const isDeletePetDialogVisible = ref(false)
 
-const list = async() => {
-  const resp =  await $api('/pets?page='+currentPage.value+'&search='+(searchQuery.value ? searchQuery.value : '') 
-  +'&species='+(specie.value ? specie.value : '')
-  , {
-    method: 'GET',
-    onResponseError({ response }){
-      console.log(response)
-    },
-  })
+const list = async () => {
+  loading.value = true 
+  try {
+    const resp = await $api(
+      '/pets?page=' + currentPage.value + '&search=' + (searchQuery.value ? searchQuery.value : '') +
+      '&species=' + (specie.value ? specie.value : ''),
+      {
+        method: 'GET',
+      },
+    )
 
-  console.log(resp)
-  totalPage.value = resp.total_page
-  pets.value = resp.pets.data
+    pets.value = resp.pets?.data || []
+    totalPage.value = resp.total_page || 1
+  } catch (error) {
+    console.error('Error al obtener mascotas:', error)
+    pets.value = []
+  } finally {
+    loading.value = false 
+  }
 }
+
 
 const editItem = item => {
   router.push({
@@ -142,7 +150,7 @@ definePage({
         </div>
       </VCardText>
       <VCardText class="pa-5">
-        <VTable v-if="pets.length">
+        <VTable>
           <thead>
             <tr>
               <th class="text-uppercase">
@@ -169,7 +177,7 @@ definePage({
             </tr>
           </thead>
   
-          <tbody>
+          <tbody v-if="!loading && pets && pets.length">
             <tr
               v-for="item in pets"
               :key="item.id"
@@ -178,13 +186,13 @@ definePage({
                 <div class="d-flex align-center">
                   <VAvatar
                     size="32"
-                    :color="item.photo ? '' : 'primary'"
-                    :class="item.photo ? '' : 'v-avatar-light-bg primary--text'"
-                    :variant="!item.photo ? 'tonal' : undefined"
+                    :color="item.avatar ? '' : 'primary'"
+                    :class="item.avatar ? '' : 'v-avatar-light-bg primary--text'"
+                    :variant="!item.avatar ? 'tonal' : undefined"
                   >
                     <VImg
-                      v-if="item.photo"
-                      :src="item.photo"
+                      v-if="item.avatar"
+                      :src="item.avatar"
                     />
                     <span
                       v-else
@@ -232,31 +240,42 @@ definePage({
             </tr>
           </tbody>
         </VTable>
-        <VAlert
-          v-else
-          type="info"
-          variant="outlined"
-        >
-          Sin resultados.
-        </VAlert>
+    
+        <VCardText>
+          <VAlert
+            v-if="loading"
+            class="text-center text-success"
+            variant="text"
+          >
+            Cargando datos...
+          </VAlert>
+          <VAlert
+            v-else-if="pets === null"
+            class="text-center text-error"
+            variant="text"
+          >
+            Ocurrió un error en el servidor.
+          </VAlert>
+          <VAlert
+            v-else-if="pets.length === 0"
+            class="text-center text-warning"
+            variant="text"
+          >
+            Sin resultados.
+          </VAlert>
+        </VCardText>
         <VPagination
           v-model="currentPage"
           :length="totalPage"
         />
-      </VCardText>
-      <DeletePetDialog
-        v-if="pet_selected_deleted"
-        v-model:is-dialog-visible="isDeletePetDialogVisible"
-        :pet-selected="pet_selected_deleted"
-        @delete-pet="deletePet"
-      />
+        <DeletePetDialog
+          v-if="pet_selected_deleted"
+          v-model:is-dialog-visible="isDeletePetDialogVisible"
+          :pet-selected="pet_selected_deleted"
+          @delete-pet="deletePet"
+        />
+      </vcardtext>
     </VCard>
   </div>
 </template>
-
-<style>
-  .v-btn__prepend {
-    margin-inline: 0 !important;
-  }
-</style>
 

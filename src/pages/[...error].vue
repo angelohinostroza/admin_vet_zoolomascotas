@@ -20,10 +20,17 @@ definePage({
   <div class="misc-wrapper">
     <ErrorHeader
       status-code="404"
-      title="Page Not Found ⚠️"
-      description="We couldn't find the page you are looking for."
-      class="mb-10"
+      title="Página no encontrada ⚠️"
+      description="No hemos podido encontrar la página que buscas."
+      class="mb-2"
     />
+
+    <VBtn
+      to="/"
+      class="mt-2"
+    >
+      Volver a la página de inicio
+    </VBtn>
 
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">
@@ -33,13 +40,6 @@ definePage({
         :height="$vuetify.display.xs ? 400 : 500"
         class="my-sm-5"
       />
-
-      <VBtn
-        to="/"
-        class="mt-10"
-      >
-        Back to Home
-      </VBtn>
 
       <VImg
         :src="authThemeMask"

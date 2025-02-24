@@ -11,36 +11,7 @@ const userProfileList = [
     title: 'Profile',
     href: '#',
   },
-  {
-    type: 'navItem',
-    icon: 'ri-settings-4-line',
-    title: 'Settings',
-    href: '#',
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-file-text-line',
-    title: 'Billing Plan',
-    href: '#',
-    chipsProps: {
-      color: 'error',
-      text: '4',
-      size: 'small',
-    },
-  },
-  { type: 'divider' },
-  {
-    type: 'navItem',
-    icon: 'ri-money-dollar-circle-line',
-    title: 'Pricing',
-    href: '#',
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-question-line',
-    title: 'FAQ',
-    href: '#',
-  },
+  
 ]
 
 const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
@@ -68,7 +39,7 @@ const logout = async () => {
       class="cursor-pointer"
       size="38"
     >
-      <VImg :src="avatar1" />
+      <VImg :src=" user.avatar ? user.avatar : avatar1" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -142,7 +113,7 @@ const logout = async () => {
                 append-icon="ri-logout-box-r-line"
                 @click="logout"
               >
-                Logout
+                Salir
               </VBtn>
             </VListItem>
           </PerfectScrollbar>

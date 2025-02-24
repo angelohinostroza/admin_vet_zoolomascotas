@@ -220,7 +220,7 @@ watch(select_pet, newValue => {
               color="primary"
               variant="tonal"
             >
-              <VImg :src="pet_selected.photo" />
+              <VImg :src="pet_selected.avatar" />
               <!--
                 <span
                 v-else

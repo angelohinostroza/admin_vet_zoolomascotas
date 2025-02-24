@@ -11,6 +11,8 @@ const currentPage = ref(1)
 const totalPage = ref(1)
 const appointment_selected_deleted = ref(null)
 const isDeleteAppointmentDialogVisible = ref(false)
+const loading = ref(false) 
+const errorMessage = ref(null)
 
 const dateRange = ref(null)
 const type_date = ref(1)
@@ -18,6 +20,9 @@ const state_pay = ref(null)
 const state_appointment = ref(null)
 
 const list = async() => {
+  loading.value = true 
+  errorMessage.value = null
+  
   let data = {
     type_date: type_date.value,
     start_date: dateRange.value ? dateRange.value.split("to")[0] : null,
@@ -29,17 +34,19 @@ const list = async() => {
     search_vets: searchVets.value,
   }
 
-  const resp =  await $api('/appointments/index?page='+currentPage.value, {
-    method: 'POST',
-    body: data,
-    onResponseError({ response }){
-      console.log(response)
-    },
-  })
+  try {
+    const resp = await $api('/appointments/index?page='+currentPage.value, {
+      method: 'POST',
+      body: data,
+    })
 
-  console.log(resp)
-  totalPage.value = resp.total_page
-  appointments.value = resp.appointments.data
+    totalPage.value = resp.total_page
+    appointments.value = resp.appointments.data
+  } catch (error) {
+    errorMessage.value = "Ocurrió un error en el servidor." 
+  } finally {
+    loading.value = false
+  }
 }
 
 const downloadExcel = () => {
@@ -132,8 +139,8 @@ definePage({
     <VCard title="📆Citas">
       <VCardText class="d-flex flex-wrap gap-4">
         <VRow>
-          <VCol cols="2">
-            <VSelect
+          <VCol cols="3">
+            <VSelect 
               v-model="type_date"
               :items="[
                 {
@@ -147,7 +154,6 @@ definePage({
               ]"
               item-title="name"
               item-value="id"
-              placeholder="Select Rol"
               eager
             />
           </VCol>
@@ -155,7 +161,7 @@ definePage({
             <AppDateTimePicker
               v-model="dateRange"
               label="Fechas de cita"
-              placeholder="Select fecha"
+              placeholder="Seleccione fecha"
               :config="{ mode: 'range' }"
             />
           </VCol>
@@ -171,40 +177,36 @@ definePage({
             />
           </VCol>
                     
-          <VCol cols="2">
-            <div class="d-flex">
+          <VCol cols="4">
+            <div class="d-flex gap-2">
               <VBtn
                 color="info"
-                class="mx-1"
                 prepend-icon="ri-search-2-line"
                 @click="list"
               />
               <VBtn
                 color="secondary"
-                class="mx-1"
                 prepend-icon="ri-restart-line"
                 @click="reset"
               />
               <VBtn
                 color="success"
-                class="mx-1"
                 prepend-icon="ri-file-excel-2-line"
                 @click="downloadExcel"
               />
+              <VBtn
+                v-if="isPermission('register_appointment')"
+                color="primary"
+                prepend-icon="ri-add-line"
+                @click="router.push({name: 'appointment-add'})"
+              >
+                Agregar
+              </VBtn>
             </div>
           </VCol>
-          <VCol cols="2">
-            <VBtn
-              v-if="isPermission('register_appointment')"
-              color="primary"
-              prepend-icon="ri-add-line"
-              @click="router.push({name: 'appointment-add'})"
-            >
-              Agregar Cita
-            </VBtn>
-          </VCol>
 
-          <VCol cols="2 ">
+
+          <VCol cols="3 ">
             <VSelect
               v-model="state_appointment"
               :items="[
@@ -248,7 +250,7 @@ definePage({
             />
           </VCol>
 
-          <VCol cols="2">
+          <VCol cols="3">
             <VSelect
               v-model="state_pay"
               :items="[
@@ -312,13 +314,13 @@ definePage({
                 <div class="d-flex align-center">
                   <VAvatar
                     size="32"
-                    :color="item.pet.photo ? '' : 'primary'"
-                    :class="item.pet.photo ? '' : 'v-avatar-light-bg primary--text'"
-                    :variant="!item.pet.photo ? 'tonal' : undefined"
+                    :color="item.pet.avatar ? '' : 'primary'"
+                    :class="item.pet.avatar ? '' : 'v-avatar-light-bg primary--text'"
+                    :variant="!item.pet.avatar ? 'tonal' : undefined"
                   >
                     <VImg
-                      v-if="item.pet.photo"
-                      :src="item.pet.photo"
+                      v-if="item.pet.avatar"
+                      :src="item.pet.avatar"
                     />
                     <span
                       v-else
@@ -380,6 +382,30 @@ definePage({
                   </IconBtn>
                 </div>
               </td>
+            </tr>
+            <tr v-if="loading">
+              <td
+                colspan="7"
+                class="text-center text-success"
+              >
+                Cargando datos...
+              </td> 
+            </tr>
+            <tr v-else-if="errorMessage">
+              <td
+                colspan="7"
+                class="text-center text-error"
+              >
+                {{ errorMessage }}
+              </td> 
+            </tr>
+            <tr v-else-if="appointments.length === 0">
+              <td
+                colspan="7"
+                class="text-center text-warning"
+              >
+                Sin resultados.
+              </td> 
             </tr>
           </tbody>
         </VTable>

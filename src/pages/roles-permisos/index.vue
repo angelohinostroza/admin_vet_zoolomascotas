@@ -28,18 +28,28 @@ const role_selected_deleted = ref(null)
 const isAddRoleDialogVisible = ref(false)
 const isEditRoleDialogVisible = ref(false)
 const isDeleteRoleDialogVisible = ref(false)
+const loading = ref(true)
+const error = ref(null)
 
 const list = async () => {
-  const resp =  await $api('/role?search='+(searchQuery.value ? searchQuery.value : ''), {
-    method: 'GET',
-    onResponseError({ response }){
-      console.log(response)
-    },
-  })
-
-  console.log(resp)
-
-  data.value = resp.roles
+  loading.value = true
+  error.value = null
+  try {
+    const resp = await $api('/role?search=' + (searchQuery.value ? searchQuery.value : ''), {
+      method: 'GET',
+    })
+    
+    data.value = resp.roles || []
+    
+    if (data.value.length === 0) {
+      error.value = 'Sin resultados.'
+    }
+  } catch (err) {
+    console.error(err)
+    error.value = 'Ocurrió un error en el servidor.'
+  } finally {
+    loading.value = false
+  }
 }
 
 const editItem = item => {
@@ -104,13 +114,40 @@ definePage({
           </VBtn>
         </div>
       </VCardText>
-
+      
       <VDataTable
         :headers="headers"
         :items="data"
         :items-per-page="5"
         class="text-no-wrap"
       >
+        <template
+          v-if="loading"
+          #body
+        >
+          <tr>
+            <td
+              colspan="4"
+              class="text-center text-success"
+            >
+              Cargando datos...
+            </td>
+          </tr>
+        </template>
+        <template
+          v-else-if="error"
+          #body
+        >
+          <tr>
+            <td
+              colspan="4"
+              class="text-center"
+              :class="{'text-error': error === 'Ocurrió un error en el servidor.', 'text-warning': error === 'Sin resultados.'}"
+            >
+              {{ error }}
+            </td>
+          </tr>
+        </template>
         <template #item.id="{ item }">
           <span class="text-h6">{{ item.id }}</span>
         </template>
@@ -163,3 +200,5 @@ definePage({
     </VCard>
   </div>
 </template>
+
+

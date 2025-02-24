@@ -22,6 +22,7 @@ const router = useRouter()
 
 const error_exists = ref(null)
 const success_exists = ref(null)
+const server_down = ref(false)
 
 definePage({
   meta: {
@@ -32,17 +33,31 @@ definePage({
 
 const login = async () => {
   try {
-    error_exists.value = null;success_exists.value = null
+    error_exists.value = null
+    success_exists.value = null
+    server_down.value = false
 
-    const resp =  await $api('/auth/login', {
+    const resp = await $api('/auth/login', {
       method: 'POST',
       body: {
         email: form.value.email,
         password: form.value.password,
       },
-      onResponseError({ response }){
-        console.log(response._data.error)
-        error_exists.value = response._data.error
+      onResponseError({ response }) {
+        if (response) {
+          if (response._data && response._data.error) {
+            error_exists.value = response._data.error
+            server_down.value = false
+            setTimeout(() => {
+              error_exists.value = null
+            }, 3000) 
+          }
+        } else {
+          server_down.value = true
+          setTimeout(() => {
+            server_down.value = false
+          }, 3000)
+        }
       },
     })
 
@@ -51,15 +66,17 @@ const login = async () => {
     localStorage.setItem('token', resp.access_token)
     localStorage.setItem('user', JSON.stringify(resp.user))
     success_exists.value = true
+
     setTimeout(async () => {
       await nextTick(() => {
-        //router.replace(route.query.to ? String(route.query.to) : '/')
-        
         document.location.reload()
       })
     }, 1500)
   } catch (error) {
     console.log(error)
+    if (!error_exists.value) {
+      server_down.value = true
+    }
   }
 }
 
@@ -69,14 +86,6 @@ const authV2LoginIllustration = useGenerateImageVariant(authV2LoginIllustrationL
 </script>
 
 <template>
-  <!--
-    <RouterLink to="/">
-    <div class="app-logo auth-logo">
-    <VNodeRenderer :nodes="themeConfig.app.logo" />
-    </div>
-    </RouterLink>
-  -->
-
   <VRow
     no-gutters
     class="auth-wrapper"
@@ -154,11 +163,21 @@ const authV2LoginIllustration = useGenerateImageVariant(authV2LoginIllustrationL
 
                 <VAlert
                   v-if="error_exists"
+                  type="warning"
+                  class="my-2"
+                >
+                  <strong>{{ error_exists }}</strong>
+                </VAlert>
+
+                <VAlert
+                  v-if="server_down"
                   type="error"
                   class="my-2"
                 >
-                  Error presentado: <strong>{{ error_exists }}</strong>
+                  <strong>El servidor no está disponible.</strong>  
+                  Por favor, comunicate con el administrador o intenta más tarde.
                 </VAlert>
+
 
                 <!-- login button -->
                 <VBtn

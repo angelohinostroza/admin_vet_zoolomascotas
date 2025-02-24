@@ -19,6 +19,8 @@ const currentPage = ref(1)
 const totalPage = ref(1)
 const surgerie_selected_deleted = ref(null)
 const isDeleteSurgerieDialogVisible = ref(false)
+const loading = ref(false) 
+const errorMessage = ref(null)
 
 const dateRange = ref(null)
 const type_date = ref(1)
@@ -26,6 +28,9 @@ const state_pay = ref(null)
 const state_vaccination = ref(null)
 
 const list = async() => {
+  loading.value = true 
+  errorMessage.value = null
+
   let data = {
     type_date: type_date.value,
     start_date: dateRange.value ? dateRange.value.split("to")[0] : null,
@@ -37,18 +42,20 @@ const list = async() => {
     search_vets: searchVets.value,
   }
 
-  const resp =  await $api('/surgeries/index?page='+currentPage.value
-    , {
-      method: 'POST',
-      body: data,
-      onResponseError({ response }){
-        console.log(response)
-      },
-    })
+  try{
+    const resp =  await $api('/surgeries/index?page='+currentPage.value
+      , {
+        method: 'POST',
+        body: data,
+      })
 
-  console.log(resp)
-  totalPage.value = resp.total_page
-  surgeries.value = resp.surgeries.data
+    totalPage.value = resp.total_page
+    surgeries.value = resp.surgeries.data
+  } catch (error) {
+    errorMessage.value = "Ocurrió un error en el servidor." 
+  } finally {
+    loading.value = false
+  }
 }
 
 const downloadExcel = () => {
@@ -160,7 +167,7 @@ definePage({
               eager
             />
           </VCol>
-          <VCol cols="2">
+          <VCol cols="3">
             <AppDateTimePicker
               v-model="dateRange"
               label="Fechas de cirugía"
@@ -180,38 +187,34 @@ definePage({
             />
           </VCol>
                     
-          <VCol cols="2">
-            <div class="d-flex">
+          <VCol cols="4">
+            <div class="d-flex gap-2">
               <VBtn
                 color="info"
-                class="mx-1"
                 prepend-icon="ri-search-2-line"
                 @click="list"
               />
               <VBtn
                 color="secondary"
-                class="mx-1"
                 prepend-icon="ri-restart-line"
                 @click="reset"
               />
               <VBtn
                 color="success"
-                class="mx-0"
                 prepend-icon="ri-file-excel-2-line"
                 @click="downloadExcel"
               />
+              <VBtn
+                v-if="isPermission('register_surgeries')"
+                color="primary"
+                prepend-icon="ri-add-line"
+                @click="router.push({name: 'surgerie-add'})"
+              >
+                Agregar
+              </VBtn>
             </div>
           </VCol>
-          <VCol cols="2">
-            <VBtn
-              v-if="isPermission('register_surgeries')"
-              color="primary"
-              prepend-icon="ri-add-line"
-              @click="router.push({name: 'surgerie-add'})"
-            >
-              Agregar Cirujía
-            </VBtn>
-          </VCol>
+
 
           <VCol cols="3">
             <VSelect
@@ -238,7 +241,7 @@ definePage({
             />
           </VCol>
 
-          <VCol cols="2">
+          <VCol cols="3">
             <VSelect
               v-model="state_pay"
               :items="[
@@ -321,13 +324,13 @@ definePage({
                 <div class="d-flex align-center">
                   <VAvatar
                     size="32"
-                    :color="item.pet.photo ? '' : 'primary'"
-                    :class="item.pet.photo ? '' : 'v-avatar-light-bg primary--text'"
-                    :variant="!item.pet.photo ? 'tonal' : undefined"
+                    :color="item.pet.avatar ? '' : 'primary'"
+                    :class="item.pet.avatar ? '' : 'v-avatar-light-bg primary--text'"
+                    :variant="!item.pet.avatar ? 'tonal' : undefined"
                   >
                     <VImg
-                      v-if="item.pet.photo"
-                      :src="item.pet.photo"
+                      v-if="item.pet.avatar"
+                      :src="item.pet.avatar"
                     />
                     <span
                       v-else
@@ -389,6 +392,30 @@ definePage({
                   </IconBtn>
                 </div>
               </td>
+            </tr>
+            <tr v-if="loading">
+              <td
+                colspan="7"
+                class="text-center text-success"
+              >
+                Cargando datos...
+              </td> 
+            </tr>
+            <tr v-else-if="errorMessage">
+              <td
+                colspan="7"
+                class="text-center text-danger"
+              >
+                {{ errorMessage }}
+              </td> 
+            </tr>
+            <tr v-else-if="surgeries.length === 0">
+              <td
+                colspan="7"
+                class="text-center text-warning"
+              >
+                Sin resultados.
+              </td> 
             </tr>
           </tbody>
         </VTable>

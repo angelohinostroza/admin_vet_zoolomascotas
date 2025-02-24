@@ -43,6 +43,10 @@ const species = ref(['Perro', 'Gato', 'Hámster', 'Loro', 'Tortuga', 'Vaca', 'Ca
 const FILE_AVATAR = ref(null)
 const IMAGEN_PREVIZUALIZA = ref(null)
 
+const emailRules = [
+  v => /.+@.+\..+/.test(v) || 'Debe ser un correo válido',
+]
+
 const loadFile = $event =>{
   if($event.target.files[0].type.indexOf("image") < 0){
     FILE_AVATAR.value = null
@@ -417,6 +421,7 @@ definePage({
             label="Email"
             type="email"
             placeholder="john@email.com"
+            :rules="emailRules"
           />
         </VCol>
         <VCol cols="6">

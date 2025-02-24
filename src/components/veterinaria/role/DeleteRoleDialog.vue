@@ -22,25 +22,29 @@ const success = ref(null)
 const error_exists = ref(null)
 const role_selected = ref(null)
 
-const deleted = async() => {
+const deleted = async () => {
   try {
-    const resp =  await $api('/role/'+role_selected.value.id, {
+    const resp = await $api('/role/' + role_selected.value.id, {
       method: 'DELETE',
-      onResponseError({ response }){
+      onResponseError({ response }) {
         console.log(response)
-        error_exists.value = response._data.error
+        error_exists.value = "Hubo un error al eliminar el rol" 
       },
     })
 
     console.log(resp)
-    success.value = "El rol se ha eliminado correctamente"
+    success.value = "Rol eliminado correctamente"
+    error_exists.value = null
     emit('addRole', true)
-    emit('update:isDialogVisible', false)
+
+    setTimeout(() => emit('update:isDialogVisible', false), 3000) 
   } catch (error) {
     console.log(error)
-    error_exists.value = error
+    success.value = null
+    error_exists.value = "Hubo un error al eliminar el rol" 
   }
 }
+
 
 onMounted(() => {
   role_selected.value = props.rolSelected
@@ -70,19 +74,17 @@ onMounted(() => {
           >
             Eliminar Rol : {{ role_selected.id }}
           </h4>
-          <!--
-            <p class="text-sm-body-1 text-center">
-            Supported payment methods
-            </p> 
-          -->
         </div>
-        <p v-if="role_selected">
+        <p
+          v-if="role_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar el ROL "{{ role_selected.name }}"?
         </p>
         <VAlert
           v-if="error_exists"
           type="error"
-          class="mt-3"
+          class="mt-3 "
         >
           <strong>En el servidor hubo un error al eliminar</strong>
         </VAlert>
@@ -94,7 +96,7 @@ onMounted(() => {
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"

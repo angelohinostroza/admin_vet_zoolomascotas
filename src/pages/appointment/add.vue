@@ -9,6 +9,7 @@ const form = ref({
     amount_add: null,
 })
 
+const router = useRouter()
 const warning = ref(null)
 const success = ref(null)
 const error_exists = ref(null)
@@ -196,32 +197,52 @@ const select_pet = ref(null)
 const items = ref([])
 
 const querySelections = async query => {
+  if (!query || query.length < 2) {
+    items.value = []
+
+    return
+  }
+
   loading.value = true
 
-  // Simulated ajax query
-  setTimeout(async () => {
-    const resp = await $api("/appointments/search-pets/"+query, {
-        method: 'GET',
-        onResponseError({ response }){
-            console.log(response)
-            error_exists.value = response._data.error
-        },
+  try {
+    const resp = await $api(`/appointments/search-pets/${query}`, {
+      method: 'GET',
+      onResponseError({ response }) {
+        console.log(response)
+      },
     })
 
     console.log(resp)
-    items.value = resp.pets
-    loading.value = false
-  }, 500)
+
+    items.value = resp.pets.map(pet => ({
+      id: pet.id,
+      name: pet.name, 
+      specie: pet.specie,
+      breed: pet.breed,
+      owner: pet.owner,
+      searchText: `${pet.name} ${pet.owner.names} ${pet.owner.surnames} ${pet.owner.n_document}`,
+    }))
+  } catch (error) {
+    console.error(error)
+  }
+
+  loading.value = false
 }
 
 watch(search, query => {
-    if(query &&  query.length > 1){
-        querySelections(query)
-    }else{
-        items.value = []
-    }
+  if (query && query.length > 1) {
+    querySelections(query)
+  } else {
+    items.value = []
+  }
+})
 
-//    query && query !== select.value && querySelections(query)
+watch(select_pet, newValue => {
+  if (newValue) {
+    search.value = newValue.name 
+  }
+
 })
 
 // FIN DE LA BUSQUEDA DEL PACIENTE
@@ -389,14 +410,29 @@ definePage({
             v-model:search="search"
             :loading="loading"
             :items="items"
-            item-title="name"
+            item-title="searchText"
             item-value="id"
             return-object
-            placeholder="Ingresa información de la mascota"
+            placeholder="Ingresa información de la mascota o del dueño"
             label="¿Quién es la mascota?"
             variant="underlined"
             :menu-props="{ maxHeight: '200px' }"
-          />
+          >
+            <template #no-data>
+              <div
+                v-if="search && search.length > 1 && !loading"
+                class="text-center pa-0"
+              >
+                <p>Sin resultados</p>
+                <VBtn
+                  color="primary"
+                  @click="router.push({name: 'pet-add'})"
+                >
+                  Crear Mascota
+                </VBtn>
+              </div>
+            </template>
+          </VAutocomplete>
         </VCol>
         <VCol
           v-if="select_pet"

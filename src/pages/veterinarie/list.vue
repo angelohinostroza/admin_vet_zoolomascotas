@@ -47,18 +47,32 @@ const avatarText = value => {
 const searchQuery = ref(null)
 const staff_selected_deleted = ref(null)
 const isDeleteStaffDialogVisible = ref(false)
+const loading = ref(true) 
+const error = ref(null)
 
 const list = async () => {
-  const resp =  await $api('/veterinaries?search='+(searchQuery.value ? searchQuery.value : ''), {
-    method: 'GET',
-    onResponseError({ response }){
-      console.log(response)
-    },
-  })
+  loading.value = true
+  error.value = null 
+  try {
+    const resp =  await $api('/veterinaries?search='+(searchQuery.value ? searchQuery.value : ''), {
+      method: 'GET',
+      onResponseError({ response }){
+        console.log(response)
+      },
+    })
 
-  console.log(resp)
+    console.log(resp)
 
-  data.value = resp.veterinaries.data
+    data.value = resp.veterinaries.data
+    if (data.value.length === 0) {
+      error.value = 'Sin resultados.'
+    }
+  } catch (err) {
+    console.error(err)
+    error.value = 'Ocurrió un error en el servidor.'
+  } finally {
+    loading.value = false  
+  }
 }
 
 const deleteUser =User => {
@@ -131,6 +145,33 @@ definePage({
         :items-per-page="5"
         class="text-no-wrap"
       >
+        <template
+          v-if="loading"
+          #body
+        >
+          <tr>
+            <td
+              colspan="7"
+              class="text-center text-success"
+            >
+              Cargando datos...
+            </td>
+          </tr>
+        </template>
+        <template
+          v-else-if="error"
+          #body
+        >
+          <tr>
+            <td
+              colspan="7"
+              class="text-center"
+              :class="{'text-error': error === 'Ocurrió un error en el servidor.', 'text-warning': error === 'Sin resultados.'}"
+            >
+              {{ error }}
+            </td>
+          </tr>
+        </template>
         <template #item.id="{ item }">
           <span class="text-h6">{{ item.id }}</span>
         </template>

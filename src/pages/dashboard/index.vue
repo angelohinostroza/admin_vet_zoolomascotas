@@ -2,8 +2,11 @@
 <script setup>
 import illustration1 from '@images/cards/illustration-1.png'
 import illustration2 from '@images/cards/illustration-2.png'
+import dashboardImageLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
+import dashboardImageDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 
 const statisticsWithImages = ref([])
+const dashboardImage = useGenerateImageVariant(dashboardImageLight, dashboardImageDark)
 
 definePage({
   meta: {
@@ -142,7 +145,7 @@ onMounted(() => {
         class="d-flex justify-center"
       >
         <img
-          src="/src/assets/images/pages/dashboard.jpg"
+          :src="dashboardImage"
           class="dashboard-image"
         >  
       </VCol>

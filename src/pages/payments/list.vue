@@ -30,6 +30,8 @@ const medical_record_selected_deleted = ref(null)
 const isDeletePaymentDialogVisible = ref(false)
 const isAddPaymentDialogVisible = ref(false)
 const isEditPaymentDialogVisible = ref(false)
+const loading = ref(false) 
+const errorMessage = ref(null)
 
 const dateRange = ref(null)
 const type_date = ref(1)
@@ -42,6 +44,9 @@ const payment_edit_selected = ref(null)
 const payment_delete_selected = ref(null)
 
 const list = async() => {
+  loading.value = true 
+  errorMessage.value = null
+
   let data = {
     type_date: type_date.value,
     start_date: dateRange.value ? dateRange.value.split("to")[0] : null,
@@ -54,18 +59,20 @@ const list = async() => {
     type_service: type_service.value,
   }
 
-  const resp =  await $api('/payments/index?page='+currentPage.value
-    , {
-      method: 'POST',
-      body: data,
-      onResponseError({ response }){
-        console.log(response)
-      },
-    })
+  try{
+    const resp =  await $api('/payments/index?page='+currentPage.value
+      , {
+        method: 'POST',
+        body: data,
+      })
 
-  console.log(resp)
-  totalPage.value = resp.total_page
-  payments.value = resp.medical_records.data
+    totalPage.value = resp.total_page
+    payments.value = resp.medical_records.data
+  } catch (error) {
+    errorMessage.value = "Ocurrió un error en el servidor." 
+  } finally {
+    loading.value = false
+  }
 }
 
 const downloadExcel = () => {
@@ -195,7 +202,7 @@ definePage({
     <VCard title="💵 Pagos">
       <VCardText class="d-flex flex-wrap gap-4">
         <VRow>
-          <VCol cols="2">
+          <VCol cols="3">
             <VSelect
               v-model="type_service"
               :items="type_services"
@@ -225,7 +232,7 @@ definePage({
               eager
             />
           </VCol>
-          <VCol cols="3">
+          <VCol cols="2">
             <AppDateTimePicker
               v-model="dateRange"
               label="Fecha del servicio o registro"
@@ -268,25 +275,13 @@ definePage({
             </div>
           </VCol>
 
-          <VCol
-            v-if="type_service"
-            cols="2"
-          >
+          <VCol cols="3">
             <VSelect
               v-model="state_vaccination"
               :items="[
-                {
-                  name: 'Pendiente',
-                  id: 1,
-                },
-                {
-                  name: 'Cancelado',
-                  id: 2,
-                },
-                {
-                  name: 'Atendido',
-                  id: 3,
-                }
+                { name: 'Pendiente', id: 1 },
+                { name: 'Cancelado', id: 2 },
+                { name: 'Atendido', id: 3 },
               ]"
               label="Estado del servicio"
               item-title="name"
@@ -295,25 +290,13 @@ definePage({
               eager
             />
           </VCol>
-          <VCol
-            v-if="type_service"
-            cols="2"
-          >
+          <VCol cols="2">
             <VSelect
               v-model="state_pay"
               :items="[
-                {
-                  name: 'Pendiente',
-                  id: 1,
-                },
-                {
-                  name: 'Parcial',
-                  id: 2,
-                },
-                {
-                  name: 'Completo',
-                  id: 3,
-                }
+                { name: 'Pendiente', id: 1 },
+                { name: 'Parcial', id: 2 },
+                { name: 'Completo', id: 3 },
               ]"
               label="Estado de pago"
               item-title="name"
@@ -322,6 +305,8 @@ definePage({
               eager
             />
           </VCol>
+
+          
           <VCol cols="3">
             <VTextField
               v-model="searchPets"
@@ -393,13 +378,13 @@ definePage({
                     />
                     <VAvatar
                       size="32"
-                      :color="item.pet.photo ? '' : 'primary'"
-                      :class="item.pet.photo ? '' : 'v-avatar-light-bg primary--text'"
-                      :variant="!item.pet.photo ? 'tonal' : undefined"
+                      :color="item.pet.avatar ? '' : 'primary'"
+                      :class="item.pet.avatar ? '' : 'v-avatar-light-bg primary--text'"
+                      :variant="!item.pet.avatar ? 'tonal' : undefined"
                     >
                       <VImg
-                        v-if="item.pet.photo"
-                        :src="item.pet.photo"
+                        v-if="item.pet.avatar"
+                        :src="item.pet.avatar"
                       />
                       <span
                         v-else
@@ -507,6 +492,30 @@ definePage({
                 </tr>
               </template>
             </template>
+            <tr v-if="loading">
+              <td
+                colspan="9"
+                class="text-center text-success"
+              >
+                Cargando datos...
+              </td> 
+            </tr>
+            <tr v-else-if="errorMessage">
+              <td
+                colspan="9"
+                class="text-center text-error"
+              >
+                {{ errorMessage }}
+              </td> 
+            </tr>
+            <tr v-else-if="payments.length === 0">
+              <td
+                colspan="9"
+                class="text-center text-warning"
+              >
+                Sin resultados.
+              </td> 
+            </tr>
           </tbody>
         </VTable>
 

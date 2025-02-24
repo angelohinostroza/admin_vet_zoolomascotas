@@ -43,6 +43,30 @@ const load_request = ref(null)
 const route = useRoute('veterinarie-edit-id')
 const veterinarie_selected = ref(null)
 
+const emailRules = [
+  v => /.+@.+\..+/.test(v) || 'Debe ser un correo válido',
+]
+
+const passwordRules = [
+  v => (v && v.length >= 6) || 'La contraseña debe tener al menos 6 caracteres',
+  v => (v && v.length <= 15) || 'La contraseña no puede exceder 15 caracteres',
+]
+
+const calculateAge = birthday => {
+  if (!birthday) return 0
+  const birthDate = new Date(birthday)
+  const today = new Date()
+  let age = today.getFullYear() - birthDate.getFullYear()
+  const monthDiff = today.getMonth() - birthDate.getMonth()
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--
+  }
+
+  return age
+}
+
+
 const loadFile = $event =>{
   if($event.target.files[0].type.indexOf("image") < 0){
     FILE_AVATAR.value = null
@@ -148,11 +172,6 @@ const selectedSegmentTime = ($event, segment_time, day) => {
 const store = async() => {
   warning.value = null
 
-  if(schedule_hour_veterinarie.value.length == 0){
-    warning.value = "Debes programar la disponibilidad laboral del veterinario"
-
-    return
-  }
   if(!form.value.name){
     warning.value = "Se debe llenar el nombre del veterinario"
 
@@ -163,14 +182,19 @@ const store = async() => {
 
     return
   }
-  if(!form.value.email){
-    warning.value = "Se debe llenar el email del veterinario"
-
-    return
-  }
   if(!form.value.phone){
     warning.value = "Se debe llenar el teléfono del veterinario"
 
+    return
+  }
+  if(!form.value.n_document){
+    warning.value = "Se debe llenar el Nº de documento del veterinario"
+
+    return
+  }
+  if (calculateAge(form.value.birthday) < 18) {
+    warning.value = "El usuario debe ser mayor de 18 años"
+    
     return
   }
   if(!form.value.gender){
@@ -183,6 +207,17 @@ const store = async() => {
 
     return
   }
+  if(!form.value.email){
+    warning.value = "Se debe llenar el email del veterinario"
+
+    return
+  }
+  if(schedule_hour_veterinarie.value.length == 0){
+    warning.value = "Debes programar la disponibilidad laboral del veterinario"
+
+    return
+  }
+  
 
   let formdata = new FormData()
 
@@ -433,6 +468,7 @@ definePage({
               label="Email"
               type="email"
               placeholder="john@email.com"
+              :rules="emailRules"
             />
           </VCol>
           <VCol cols="6">
@@ -442,6 +478,7 @@ definePage({
               placeholder="············"
               :type="isPasswordVisible ? 'text' : 'password'"
               :append-inner-icon="isPasswordVisible ? 'ri-eye-off-line' : 'ri-eye-line'"
+              :rules="passwordRules"
               @click:append-inner="isPasswordVisible = !isPasswordVisible"
             />
           </VCol>

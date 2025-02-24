@@ -10,6 +10,7 @@ const success = ref(null)
 const error_exists = ref(null)
 const fileInputRef = ref(null)
 const route = useRoute('pet-edit-id')
+const router = useRouter() 
 
 const form = ref({
   //Datos Mascota
@@ -49,6 +50,10 @@ const IMAGEN_PREVIZUALIZA = ref(null)
 const pet_selected = ref({
   name: '',
 })
+
+const emailRules = [
+  v => /.+@.+\..+/.test(v) || 'Debe ser un correo válido',
+]
 
 const loadFile = $event =>{
   if($event.target.files[0].type.indexOf("image") < 0){
@@ -187,7 +192,8 @@ const edit = async() => {
       success.value = null
       warning.value = null
       error_exists.value = null
-    }, 3500)
+      router.push('/pet/list')
+    }, 3000)
 
   } catch (error) {
     console.log(error)
@@ -227,7 +233,7 @@ const show = async() => {
     form.value.address = pet_selected.value.owner.address
     form.value.city = pet_selected.value.owner.city
     form.value.emergency_contact = pet_selected.value.owner.emergency_contact
-    IMAGEN_PREVIZUALIZA.value = pet_selected.value.photo
+    IMAGEN_PREVIZUALIZA.value = pet_selected.value.avatar
   } catch (error) {
     console.log(error)
   }
@@ -435,6 +441,7 @@ definePage({
             label="Email"
             type="email"
             placeholder="john@email.com"
+            :rules="emailRules"
           />
         </VCol>
         <VCol cols="6">
