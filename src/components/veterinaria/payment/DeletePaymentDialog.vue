@@ -40,8 +40,11 @@ const deleted = async() => {
 
     console.log(resp)
     success.value = "El pago se ha eliminado correctamente"
+    error_exists.value = null
     emit('deletePayment', resp.payment)
-    emit('update:isDialogVisible', false)
+    setTimeout(() => {
+      emit('update:isDialogVisible', false)
+    }, 3000)
   } catch (error) {
     console.log(error)
     error_exists.value = error
@@ -82,7 +85,10 @@ onMounted(() => {
             </p> 
           -->
         </div>
-        <p v-if="medical_record_selected">
+        <p 
+          v-if="medical_record_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar el PAGO "{{ props.paymentSelected.amount }} PEN"?
         </p>
         <VAlert
@@ -100,7 +106,7 @@ onMounted(() => {
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"

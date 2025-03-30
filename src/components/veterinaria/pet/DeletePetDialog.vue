@@ -35,13 +35,25 @@ const deleted = async() => {
 
     console.log(resp)
     success.value = "La mascota se ha eliminado correctamente"
+    error_exists.value = null
     emit('deletePet', pet_selected.value)
-    emit('update:isDialogVisible', false)
+    setTimeout(() => {
+      emit('update:isDialogVisible', false)
+    }, 3000) 
   } catch (error) {
-    console.log(error)
-    error_exists.value = error
+
+    if (error.response && error.response.status === 400) {
+     
+      if (error.response.data && error.response.data.message_text) {
+        error_exists.value = error.response.data.message_text
+      } else {
+        error_exists.value = "No se puede eliminar la mascota debido a registros asociados."
+      }
+    } else {
+      error_exists.value = "Hubo un problema en el servidor al intentar eliminar."
+    }
   }
-}
+} 
 
 onMounted(() => {
   pet_selected.value = props.petSelected
@@ -71,31 +83,32 @@ onMounted(() => {
           >
             Eliminar Mascota : {{ pet_selected.id }}
           </h4>
-          <!--
-            <p class="text-sm-body-1 text-center">
-            Supported payment methods
-            </p> 
-          -->
         </div>
-        <p v-if="pet_selected">
+        <p 
+          v-if="pet_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar la MASCOTA "{{ pet_selected.name }}"?
         </p>
+        <!-- Mensaje de error -->
         <VAlert
           v-if="error_exists"
           type="error"
           class="mt-3"
         >
-          <strong>En el servidor hubo un error al eliminar</strong>
+          <strong>{{ error_exists }}</strong>
         </VAlert>
+
+        <!-- Mensaje de éxito -->
         <VAlert
           v-if="success"
-          type="warning"
+          type="success"
           class="mt-3"
         >
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"

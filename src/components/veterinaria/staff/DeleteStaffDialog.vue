@@ -36,7 +36,9 @@ const deleted = async() => {
     console.log(resp)
     success.value = "El usuario se ha eliminado correctamente"
     emit('deleteUser', user_selected.value)
-    emit('update:isDialogVisible', false)
+    setTimeout(() => {
+      emit('update:isDialogVisible', false)
+    }, 3000) 
   } catch (error) {
     console.log(error)
     error_exists.value = error
@@ -77,7 +79,10 @@ onMounted(() => {
             </p> 
           -->
         </div>
-        <p v-if="user_selected">
+        <p
+          v-if="user_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar el USUARIO "{{ user_selected.full_name }}"?
         </p>
         <VAlert
@@ -95,7 +100,7 @@ onMounted(() => {
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"
@@ -119,3 +124,4 @@ onMounted(() => {
   }
 }
 </style>
+

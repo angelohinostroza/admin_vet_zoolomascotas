@@ -212,11 +212,6 @@ const store = async() => {
 
     return
   }
-  if(schedule_hour_veterinarie.value.length == 0){
-    warning.value = "Debes programar la disponibilidad laboral del veterinario"
-
-    return
-  }
   
 
   let formdata = new FormData()

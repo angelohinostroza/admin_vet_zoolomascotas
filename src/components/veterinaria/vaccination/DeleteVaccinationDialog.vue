@@ -38,8 +38,11 @@ const deleted = async() => {
       error_exists.value = "La vacunación no se puede eliminar porque ya ha sido atendida"
     }else{
       success.value = "La vacunación se ha eliminado correctamente"
+      error_exists.value = null
       emit('delete-vaccination', vaccination_selected.value)
-      emit('update:isDialogVisible', false)
+      setTimeout(() => {
+        emit('update:isDialogVisible', false)
+      }, 3000)
     }
   } catch (error) {
     console.log(error)
@@ -76,7 +79,10 @@ onMounted(() => {
             Eliminar Vacunación : {{ vaccination_selected.id }}
           </h4>
         </div>
-        <p v-if="vaccination_selected">
+        <p 
+          v-if="vaccination_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar esta vacunación de la mascota "{{ vaccination_selected.pet.name }}"?
         </p>
         <VAlert
@@ -94,7 +100,7 @@ onMounted(() => {
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"

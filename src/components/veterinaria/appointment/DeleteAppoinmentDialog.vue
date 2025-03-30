@@ -38,8 +38,11 @@ const deleted = async() => {
       error_exists.value = "La cita medica no se puede eliminar porque ya ha sido atendida"
     }else{
       success.value = "La cita medica se ha eliminado correctamente"
+      error_exists.value = null
       emit('delete-appointment', appointment_selected.value)
-      emit('update:isDialogVisible', false)
+      setTimeout(() => {
+        emit('update:isDialogVisible', false)
+      }, 3000)
     }
   } catch (error) {
     console.log(error)
@@ -71,12 +74,15 @@ onMounted(() => {
         <div class="mb-6">
           <h4
             v-if="appointment_selected"
-            class="text-h4 text-center mb-2"
+            class="text-h4 text-center"
           >
             Eliminar Cita : {{ appointment_selected.id }}
           </h4>
         </div>
-        <p v-if="appointment_selected">
+        <p 
+          v-if="appointment_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar esta cita medica de la mascota "{{ appointment_selected.pet.name }}"?
         </p>
         <VAlert
@@ -94,7 +100,7 @@ onMounted(() => {
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"

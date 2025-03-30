@@ -38,8 +38,11 @@ const deleted = async() => {
       error_exists.value = "La cirujía no se pudo eliminar porque ya ha sido atendida"
     }else{
       success.value = "La cirujía se ha eliminado correctamente"
+      error_exists.value = null
       emit('delete-surgerie', surgerie_selected.value)
-      emit('update:isDialogVisible', false)
+      setTimeout(() => {
+        emit('update:isDialogVisible', false)
+      }, 3000)
     }
   } catch (error) {
     console.log(error)
@@ -81,7 +84,10 @@ onMounted(() => {
             </p> 
           -->
         </div>
-        <p v-if="surgerie_selected">
+        <p 
+          v-if="surgerie_selected"
+          class="text-center"
+        >
           ¿Estas seguro de eliminar esta cirujía del registro la mascota "{{ surgerie_selected.pet.name }}"?
         </p>
         <VAlert
@@ -99,7 +105,7 @@ onMounted(() => {
           <strong>{{ success }}</strong>
         </VAlert>
       </VCardText>
-      <VCardText class="pa-5">
+      <VCardText class="pa-5 text-center">
         <VBtn
           color="error"
           class="mb-4"
