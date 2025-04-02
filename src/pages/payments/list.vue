@@ -19,7 +19,7 @@ const type_services = ref([
   },
   {
     id: 3,
-    name: 'Cirujía',
+    name: 'Cirugías',
   },
 ])
 
@@ -419,7 +419,7 @@ definePage({
                     v-if="item.event_type == 3"
                     color="success"
                   >
-                    Cirujía
+                    Cirugía
                   </VChip>  
                 </td>
                 <td>

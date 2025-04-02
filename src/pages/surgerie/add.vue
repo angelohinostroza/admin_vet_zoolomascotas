@@ -330,7 +330,7 @@ definePage({
     <VCardText class="pa-5">
       <div class="mb-1">
         <h4 class="text-h4 text-center mb-1">
-          Agregar Cirujía 🏥
+          Agregar Cirugía 🏥
         </h4>
       </div>
     </VCardText>

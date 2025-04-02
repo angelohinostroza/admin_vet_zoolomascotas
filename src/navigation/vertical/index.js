@@ -101,7 +101,7 @@ export default [
   },
   
   {
-    title: 'Cirujías',
+    title: 'Cirugías',
     icon: { icon: 'ri-microscope-line' },
     children: [
       {

@@ -145,7 +145,7 @@ definePage({
 
 <template>
   <div>
-    <VCard title="🏥 Cirujías">
+    <VCard title="🏥 Cirugías">
       <VCardText class="d-flex flex-wrap gap-4">
         <VRow>
           <VCol cols="3">
@@ -233,7 +233,7 @@ definePage({
                   id: 3,
                 }
               ]"
-              label="Estado de la cirujía"
+              label="Estado de la cirugía"
               item-title="name"
               item-value="id"
               placeholder="Seleccione Estado"

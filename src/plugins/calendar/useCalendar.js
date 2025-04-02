@@ -164,7 +164,7 @@ export const useCalendar = (event, isEventHandlerSidebarActive, isLeftSidebarOpe
   // 👉 Calendar colors
   const calendarsColor = {
     Cita: 'primary',
-    Cirujía: 'success',
+    Cirugía: 'success',
     Personal: 'error',
     Vacunación: 'warning',
     ETC: 'info',

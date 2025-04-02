@@ -65,7 +65,7 @@ const ReportForService = async() => {
         ],
       },
       {
-        name: 'Cirujías (Mes)',
+        name: 'Cirugías (Mes)',
         slideImg: '/src/assets/images/cards/surgery.png',
         income_bruto: resp.bruto_income_surgeries,
         variation_percentage: resp.VPsurgeries,

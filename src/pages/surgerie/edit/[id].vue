@@ -195,7 +195,7 @@ const update = async() => {
     }
 
     if(!form.value.amount){
-      warning.value = "Es requerido ingresar el costo de la cirujía"
+      warning.value = "Es requerido ingresar el costo de la cirugía"
       
       return
     }
@@ -324,7 +324,7 @@ definePage({
     <VCardText class="pa-5">
       <div class="mb-1">
         <h4 class="text-h4 text-center mb-1">
-          Editar Cirujía 🏥 {{ route.params.id }}
+          Editar Cirugía 🏥 {{ route.params.id }}
         </h4>
       </div>
     </VCardText>
@@ -515,7 +515,7 @@ definePage({
                 id: 3,
               }
             ]"
-            label="Estado de la cirujía"
+            label="Estado de la cirugía"
             item-title="name"
             item-value="id"
             :disabled="surgerie_selected.state == 2 || surgerie_selected.state == 3 ? true : false"
@@ -531,10 +531,10 @@ definePage({
                   Veterinario
                 </th>
                 <th class="text-uppercase">
-                  Dia de la cirujía
+                  Dia de la cirugía
                 </th>
                 <th class="text-uppercase">
-                  Duración de la cirujía
+                  Duración de la cirugía
                 </th>
               </tr>
             </thead>

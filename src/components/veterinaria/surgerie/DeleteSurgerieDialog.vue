@@ -35,9 +35,9 @@ const deleted = async() => {
 
     console.log(resp)
     if(resp.message == 403){
-      error_exists.value = "La cirujía no se pudo eliminar porque ya ha sido atendida"
+      error_exists.value = "La cirugía no se pudo eliminar porque ya ha sido atendida"
     }else{
-      success.value = "La cirujía se ha eliminado correctamente"
+      success.value = "La cirugía se ha eliminado correctamente"
       error_exists.value = null
       emit('delete-surgerie', surgerie_selected.value)
       setTimeout(() => {
@@ -76,7 +76,7 @@ onMounted(() => {
             v-if="surgerie_selected"
             class="text-h4 text-center mb-2"
           >
-            Eliminar cirujía Nº {{ surgerie_selected.id }}
+            Eliminar cirugía Nº {{ surgerie_selected.id }}
           </h4>
           <!--
             <p class="text-sm-body-1 text-center">
@@ -88,7 +88,7 @@ onMounted(() => {
           v-if="surgerie_selected"
           class="text-center"
         >
-          ¿Estas seguro de eliminar esta cirujía del registro la mascota "{{ surgerie_selected.pet.name }}"?
+          ¿Estas seguro de eliminar esta cirugía del registro la mascota "{{ surgerie_selected.pet.name }}"?
         </p>
         <VAlert
           v-if="error_exists"

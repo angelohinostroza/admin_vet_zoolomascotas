@@ -16,14 +16,14 @@ export const useCalendarStore = defineStore('calendar', {
       },
       {
         color: 'success',
-        label: 'Cirujía',
+        label: 'Cirugía',
       },
       {
         color: 'info',
         label: 'ETC',
       },
     ],
-    selectedCalendars: ['Personal', 'Cita', 'Vacunación', 'Cirujía', 'ETC'],
+    selectedCalendars: ['Personal', 'Cita', 'Vacunación', 'Cirugía', 'ETC'],
   }),
   actions: {
     async fetchEvents() {

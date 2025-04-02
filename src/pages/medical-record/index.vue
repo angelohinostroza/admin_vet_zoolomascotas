@@ -619,7 +619,7 @@ watch(select_pet, newValue => {
                   <!-- 👉 Header -->
                   <div class="d-flex justify-space-between align-center flex-wrap mb-2">
                     <div class="app-timeline-title">
-                      Cirujía - {{ historial_record.event_date }} <VChip
+                      Cirugía - {{ historial_record.event_date }} <VChip
                         v-if="historial_record.state == 1"
                         class="mx-2"
                         color="warning"
@@ -645,13 +645,13 @@ watch(select_pet, newValue => {
                   </div>
     
                   <div class="app-timeline-text mt-3">
-                    La hora de la cirujía inicia @{{ historial_record.hour_start }} y termina @{{ historial_record.hour_end }}
+                    La hora de la cirugía inicia @{{ historial_record.hour_start }} y termina @{{ historial_record.hour_end }}
                     <br>
                     Costo : {{ historial_record.amount }} PEN
                     <br>
                     Lugar: {{ historial_record.outside == 0 ? 'Dentro de la veterinaria' : 'Fuera de la veterinaria' }}
                     <br>
-                    Tipo de Cirujía: {{ historial_record.surgerie_type }}
+                    Tipo de Cirugía: {{ historial_record.surgerie_type }}
                   </div>
     
                   <!-- 👉 Person -->
